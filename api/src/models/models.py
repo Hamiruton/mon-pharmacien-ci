@@ -44,3 +44,13 @@ class User:
         user = db.users.find_one({"_id": ObjectId(id)})
         user['_id'] = str(user['_id'])
         return user
+    
+    @staticmethod
+    def update_user(id:str, update_data:DICT_OF_STR) -> int:
+        user = db.users.update_one(
+            { "_id": ObjectId(id) },
+            {
+                "$set": update_data
+            }
+        )
+        return user.modified_count

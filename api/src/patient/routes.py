@@ -26,6 +26,14 @@ def get_user(id):
     return user
 
 
+@patient.put('/<id>')
+def update_user(id):
+    data_to_update = request.get_json()
+    modified_user = User.update_user(id, data_to_update)
+
+    return "Bien modifié" if modified_user == 1 else "La modification a échoué"
+
+
 @patient.get('/on-call-pharmacy')
 def get_on_call_clinic():
     pharmacies = get_on_call_pharmacy()
