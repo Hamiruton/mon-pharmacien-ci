@@ -11,13 +11,7 @@
             >HOME</v-btn>
         </v-col>
         <v-col>
-            <v-btn
-                color="teal-lighten-3"
-                size="x-large"
-                rounded="lg"
-                title="Cliquer pour envoyer ton ordonnane/bon d'assurance"
-                class="w-100"
-            >ORDONNANCE</v-btn>
+            <Prescription />
         </v-col>
         <v-col>
             <v-btn
@@ -55,10 +49,12 @@
                 rounded="lg"
                 title="Cliquer pour voir about"
                 class="w-100"
-            >ABOUT</v-btn>
+            >A PROPOS DE NOUS</v-btn>
         </v-col>
     </v-row>
 </template>
 
-<script>
+<script setup>
+import Prescription from './Prescription.vue';
+
 </script>
