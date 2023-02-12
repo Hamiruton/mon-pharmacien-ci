@@ -4,14 +4,7 @@
             <v-app-bar-title class="text-h4">{{ leadTitle }}</v-app-bar-title>
             <v-spacer></v-spacer>
             
-            <v-btn
-                icon="mdi-cart"
-                variant="elevated"
-                color="teal-lighten-2"
-                size="small"
-                class="mr-5"
-                title="Panier de médicaments"
-            ></v-btn>
+            <Order />
 
             <v-menu persistent>
                 <template #activator="{ props }">
@@ -46,6 +39,7 @@
 </template>
 
 <script>
+import Order from './Order.vue';
 export default {
     data() {
         return {
@@ -57,6 +51,7 @@ export default {
             type: String
         }
     },
+    components: {Order},
     methods: {
         toggleDialog() {
             this.dialog = !this.dialog;
