@@ -71,11 +71,6 @@
         place-items: center;
     }
 
-    img {
-        margin-bottom: 1.2em;
-        width: 130px;
-    }
-
     .login-form {
         background-color: white;
         padding: 3em 5em;
@@ -83,6 +78,11 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+
+    .login-form__title {
+        text-transform: uppercase;
+        font-size: 5em;
     }
 
     .login-form__body {
