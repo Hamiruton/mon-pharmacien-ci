@@ -14,13 +14,7 @@
             <Prescription />
         </v-col>
         <v-col>
-            <v-btn
-                color="teal-lighten-3"
-                size="x-large"
-                rounded="lg"
-                title="Cliquer pour voir les pharmacies (de garde)"
-                class="w-100"
-            >PHARMACIE</v-btn>
+            <Pharmacy />
         </v-col>
         <v-col>
             <v-btn
@@ -56,5 +50,6 @@
 
 <script setup>
 import Prescription from './Prescription.vue';
+import Pharmacy from './Pharmacy.vue';
 
 </script>
