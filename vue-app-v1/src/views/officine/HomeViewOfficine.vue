@@ -5,22 +5,22 @@
         <v-sheet min-height="80vh" rounded="lg" class="child2 pa-16" elevation="5">
             <v-row>
                 <v-col>
-                    <v-btn class="w-100 h-100 text-h6" rounded="lg" color="teal-lighten-3">GESTION DU STOCK DE L'OFFICINE</v-btn>
+                    <v-btn class="w-100 h-100 text-h6" rounded="lg" color="teal-lighten-3" :to="{ name: 'HandleStock' }">GESTION DU STOCK DE L'OFFICINE</v-btn>
                 </v-col>
                 <v-col>
-                    <v-btn class="w-100 h-100 text-h6 btn" rounded="lg" color="teal-lighten-3">SAISIE DE MÉDICAMENTS</v-btn>
+                    <v-btn class="w-100 h-100 text-h6 btn" rounded="lg" color="teal-lighten-3" :to="{ name: 'register_drugs' }">SAISIE DE MÉDICAMENTS</v-btn>
                 </v-col>
                 <v-col>
-                    <v-btn class="w-100 h-100 text-h6 btn" rounded="lg" color="teal-lighten-3">TRAITEMENT DES ORDONNANCES</v-btn>
+                    <v-btn class="w-100 h-100 text-h6 btn" rounded="lg" color="teal-lighten-3" :to="{ name: 'HandlePrescrip' }">TRAITEMENT DES ORDONNANCES</v-btn>
                 </v-col>
             </v-row>
 
             <v-row>
                 <v-col>
-                    <v-btn class="w-100 h-100 text-h6 btn" rounded="lg" color="teal-lighten-3">HISTORIQUE</v-btn>
+                    <v-btn class="w-100 h-100 text-h6 btn" rounded="lg" color="teal-lighten-3" :to="{ name: 'historic' }">HISTORIQUE</v-btn>
                 </v-col>
                 <v-col>
-                    <v-btn class="w-100 h-100 text-h6 btn" rounded="lg" color="teal-lighten-3">STATISTIQUES DE VENTE</v-btn>
+                    <v-btn class="w-100 h-100 text-h6 btn" rounded="lg" color="teal-lighten-3" :to="{ name: 'stats' }">STATISTIQUES DE VENTE</v-btn>
                 </v-col>
                 <v-col>
                     <v-btn class="w-100 h-100 text-h6 btn" rounded="lg" color="teal-lighten-3">PARAMÈTRES</v-btn>
