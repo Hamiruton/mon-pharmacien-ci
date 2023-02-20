@@ -66,7 +66,7 @@
     main {
         width: 100vw;
         height: 100vh;
-        background-color: #f8c891;
+        background-color: #4db6ac;
         display: grid;
         place-items: center;
     }
