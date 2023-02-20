@@ -5,7 +5,7 @@
             rounded="lg"
         >
             <TableData
-                :listPharmacy="listMedocs"
+                :listPharmacy="liste"
                 tableHeight="70vh"
                 clickCell="clickCellHome"
                 :displayInfosMedocs=true
@@ -50,9 +50,15 @@
                     {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
                     {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
                     {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                ]
+                ],
+                liste: null
             }
-        }
+        },
+        async created() {
+            const response = (await this.$axios.get('/client/list-pharmacy')).data;
+            this.liste = response
+            //console.log(response)
+        },
     }
 </script>
 
