@@ -5,9 +5,7 @@
 </template>
 
 <script>
-import LayoutOfficine from '@/layouts/LayoutOfficine.vue';
     export default {
         name: "HandlePrescip",
-        components: { LayoutOfficine },
     }
 </script>

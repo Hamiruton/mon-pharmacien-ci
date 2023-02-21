@@ -55,11 +55,8 @@
 </template>
 
 <script>
-import LayoutOfficine from '@/layouts/LayoutOfficine.vue';
-
     export default {
     name: "RegisterDrugs",
-    components: { LayoutOfficine },
     data() {
         return {
             contreIndic: false,
