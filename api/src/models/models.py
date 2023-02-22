@@ -1,15 +1,17 @@
 """Import module"""
 from typing import List
 from bson.objectid import ObjectId
-from src.config.db import db
+from src.config.db import get_database
 from src.constants.complex_types import DICT_OF_STR
+
+db = get_database()
 
 
 def get_on_call_pharmacy() -> List:
     """
     Returns the list of on-call pharmacies and the related city
     """
-    phamacies = db.onCallPharmacy.find()
+    phamacies = db['onCallPharmacy'].find()
     list_pharma = []
     for pharma in phamacies:
         pharma['_id'] = str(pharma['_id'])
@@ -22,7 +24,7 @@ def set_on_call_pharmacy(name_state:str, list_pharmacy: List) -> None:
     """
     Insert in the "on-call pharmacy" collection, the list of on-call pharmacies and the related city
     """
-    db.onCallPharmacy.insert_one({
+    db['onCallPharmacy'].insert_one({
         "ville": name_state,
         "pharmacies": list_pharmacy
     })
@@ -51,14 +53,14 @@ class User:
         """
         Register data in collection
         """
-        db.users.insert_one(self.data)
+        db['users'].insert_one(self.data)
 
     @staticmethod
     def get_user(user_id:str) -> DICT_OF_STR:
         """
         Return user data according to their id
         """
-        user = db.users.find_one({"_id": ObjectId(user_id)})
+        user = db['users'].find_one({"_id": ObjectId(user_id)})
         user['_id'] = str(user['_id'])
         return user
 
@@ -67,7 +69,7 @@ class User:
         """
         Update user data according to their id
         """
-        user = db.users.update_one(
+        user = db['users'].update_one(
             { "_id": ObjectId(user_id) },
             {
                 "$set": update_data
