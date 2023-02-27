@@ -1,7 +1,7 @@
 from src import create_app
 from waitress import serve
 
-mode = 'prod'
+mode = 'dev'
 
 if __name__ == "__main__":
     app = create_app()
@@ -9,4 +9,4 @@ if __name__ == "__main__":
     if mode == 'prod':
         serve(app, threads=1, port=50100, host='0.0.0.0')
     else:
-        app.run()
+        app.run(port=8000)
