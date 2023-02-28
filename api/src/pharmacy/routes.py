@@ -1,5 +1,5 @@
 """ Import module """
-from flask import request, jsonify
+from flask import request, jsonify, make_response
 from src.pharmacy import pharmacy
 from src.models.models import Pharmacy, Drug
 
@@ -14,6 +14,21 @@ def register_officine():
     res = officine.create()
     print(res)
     return "res"
+
+
+@pharmacy.post('/login')
+def login() -> any:
+    """
+    Route to login user
+    """
+    data = request.get_json()
+    res = Pharmacy.login(data)
+    if res == "incorrect email":
+        return make_response(jsonify({"message":res}), 200)
+    elif res == "incorrect password":
+        return make_response(jsonify({"message":res}), 200)
+    else:
+        return make_response(jsonify(res), 200)
 
 
 @pharmacy.get('/<idOfficine>')
