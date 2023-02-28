@@ -16,6 +16,14 @@ def register_officine():
     return "res"
 
 
+@pharmacy.get('/<idOfficine>')
+def get_officine(idOfficine):
+    """
+    Route for returning informations about a pharmacy
+    """
+    res = Pharmacy.get_officine(idOfficine)
+    return jsonify(res)
+
 @pharmacy.post('/<idOfficine>/register-medoc')
 def register_drugs(idOfficine):
     """
