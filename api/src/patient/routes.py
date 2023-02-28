@@ -1,5 +1,5 @@
 """ Import module """
-from flask import request, jsonify
+from flask import request, jsonify, make_response
 from src.patient import patient
 from src.models.models import User, get_on_call_pharmacy, Drug
 from src.constants.url_pharmacies import URL_ABOBO, URL_COCODY, URL_YOPOUGON
@@ -7,14 +7,18 @@ from src.utils.scrap_pharmacies import web_scrap
 
 
 @patient.post('/')
+@patient.post('/register')
 def register() -> str:
     """
     Route for registering data
     """
     data = request.get_json()
     user = User(data)
-    user.register()
-    return "Reussi"
+    res = user.register()
+    if res == False:
+        return make_response(jsonify({"message":"Veuillez entrer un autre nom ou email"}), 200)
+    else:
+        return make_response(jsonify({"message":res}), 201)
 
 
 @patient.get('/<user_id>')

@@ -47,15 +47,22 @@ class User:
             "constant": []
         }
 
-    def __repr__(self) -> str:
-        return f'<Patient {self.data["fullname"]}>'
 
-
-    def register(self) -> None:
+    def register(self) -> bool:
         """
-        Register data in collection
+        Register a patient in database if fullname and email don't exist in it yet
         """
-        db['users'].insert_one(self.data)
+        unique_user = db['users'].find_one({
+            "$or": [
+                {"fullname": self.data['fullname']},
+                {"email": self.data['email']}
+            ]
+        })
+        if unique_user:
+            return False
+        else:
+            insertion = db['users'].insert_one(self.data)
+            return insertion.acknowledged
 
     @staticmethod
     def get_user(user_id:str) -> DICT_OF_STR:
