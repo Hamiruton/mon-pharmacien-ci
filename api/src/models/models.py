@@ -123,6 +123,20 @@ class Pharmacy:
         """
         insertion = db['officine'].insert_one(self.data)
         return insertion.acknowledged
+    
+
+    @staticmethod
+    def login(officine_data) -> any:
+        if_exist = db['officine'].find_one({"email": officine_data['email']})
+        if if_exist == None:
+            return "incorrect email"
+        elif if_exist['password'] != officine_data['password']: # Check if password entered matches with hash password
+            return "incorrect password"
+        else:
+            # Create a token to send to user
+            if_exist['_id'] = str(if_exist['_id'])
+        
+        return if_exist
 
 
     @staticmethod
