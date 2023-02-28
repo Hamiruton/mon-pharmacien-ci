@@ -63,6 +63,21 @@ class User:
         else:
             insertion = db['users'].insert_one(self.data)
             return insertion.acknowledged
+        
+    
+    @staticmethod
+    def login(user_data) -> any:
+        verify_user = db['users'].find_one({"email": user_data['email']})
+        if verify_user == None:
+            return "incorrect email"
+        elif verify_user['password'] != user_data['password']: # Check if password entered matches with hash password
+            return "incorrect password"
+        else:
+            # Create a token to send to user
+            verify_user['_id'] = str(verify_user['_id'])
+        
+        return verify_user
+
 
     @staticmethod
     def get_user(user_id:str) -> DICT_OF_STR:
