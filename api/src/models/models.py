@@ -115,6 +115,19 @@ class Pharmacy:
             }
         )
         return officine.modified_count
+    
+    
+    @staticmethod
+    def get_officine(officine_id:str) -> DICT_OF_STR:
+        """
+        Get officine data according to their id
+        """
+        officine = db['officine'].find_one({
+            "_id": ObjectId(officine_id)
+        })
+        officine['_id'] = str(officine['_id'])
+        del officine['password']
+        return dict(officine)
 
 
 class Drug:
