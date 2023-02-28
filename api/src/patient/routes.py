@@ -69,6 +69,16 @@ def get_all_clinic_have_drug(idMedoc:str):
     return jsonify(res)
 
 
+@patient.get('/medocs')
+def get_all_drugs():
+    """
+    Route for get all officines that have idMedoc
+    """
+    res = Drug.get_all_drugs()
+    #print(res)
+    return jsonify(res)
+
+
 @patient.get('/list-pharmacy')
 def get_list_pharmacy():
     """
