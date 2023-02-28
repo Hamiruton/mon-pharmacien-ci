@@ -46,3 +46,16 @@ def get_all_drugs(idOfficine):
     res = Drug.get_all_by_officine(idOfficine)
     print(res)
     return "jsonify(res)"
+
+
+@pharmacy.get('/<idOfficine>/<idMedoc>')
+def get_one_drug(idOfficine, idMedoc):
+    """
+    Route for returning a particular drug in a pharmacy
+    """
+    res = Drug.get_drug_by_officine(idOfficine, idMedoc)
+    if res == False:
+        return "Impossible, ce médicament n'existe pas dans votre stock"
+    else:
+        return res
+    
