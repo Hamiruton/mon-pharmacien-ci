@@ -43,7 +43,7 @@ def get_all_drugs(idOfficine):
     """
     Route for returning all drugs in a pharmacy
     """
-    res = Drug.get_all_by_officine(idOfficine)
+    res = Drug.get_all_drugs_by_officine(idOfficine)
     print(res)
     return "jsonify(res)"
 

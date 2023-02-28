@@ -179,12 +179,12 @@ class Drug:
             }
             insertion = db['drugs'].insert_one(insert_data)
             return insertion.acknowledged
-    
-
+        
+        
     @staticmethod
-    def get_all_by_officine(officine_id:str) -> any:
+    def get_all_drugs_by_officine(officine_id:str) -> any:
         """
-        Return all drugs data in collection
+        Return all drugs that an officine has by officine_id
         """
         drugs = db['drugs'].find({
             "affiliatedOf": {
