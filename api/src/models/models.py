@@ -1,4 +1,5 @@
 """Import module"""
+import json
 from typing import List
 from bson.objectid import ObjectId
 from src.config.db import get_database
@@ -42,6 +43,7 @@ class User:
             "email": data["email"],
             "phone": data["phone"],
             "town": data["town"],
+            "password": data["password"],
             "constant": []
         }
 
@@ -76,3 +78,116 @@ class User:
             }
         )
         return user.modified_count
+
+
+class Pharmacy:
+    """
+    In this class, methods which deal with officine data have been gathered
+    """
+    def __init__(self, data:DICT_OF_STR) -> None:
+        self.data = {
+            "name": data["name"],
+            "titulaire": data["titulaire"],
+            "email": data["email"],
+            "phone": data["phone"],
+            "town": data["town"],
+            "password": data["password"]
+        }
+
+
+    def create(self) -> any:
+        """
+        Register data in collection
+        """
+        insertion = db['officine'].insert_one(self.data)
+        return insertion.acknowledged
+
+
+    @staticmethod
+    def update_user(officine_id:str, update_data:DICT_OF_STR) -> int:
+        """
+        Update officine data according to their id
+        """
+        officine = db['officine'].update_one(
+            { "_id": ObjectId(officine_id) },
+            {
+                "$set": update_data
+            }
+        )
+        return officine.modified_count
+
+
+class Drug:
+    """
+    In this class, methods which deal with drugs data have been gathered
+    """
+    @staticmethod
+    def saveD(data:DICT_OF_STR, officine_id:str) -> bool:
+        """
+        Register drugs data in collection
+        """
+        officine_registered_same_drug = db.drugs.find_one({ # Query to find if officine has already registered this drug
+            "nameMedoc": data['nameMedoc'],
+            "affiliatedOf": {
+                "$elemMatch": {
+                    "idOf": ObjectId(officine_id)
+                }
+            }
+        })
+
+        drug_existed = db.drugs.find_one({
+            "nameMedoc": data['nameMedoc']
+        })
+
+        if officine_registered_same_drug:
+            return False
+        elif drug_existed:
+            insertion = db['drugs'].update_one(
+                { "_id": drug_existed["_id"] },
+                {
+                    "$push": {
+                        "affiliatedOf": {"idOf": ObjectId(officine_id), "qtyMedoc": data["qtyMedoc"]}
+                    }
+                }
+            )
+            return insertion.acknowledged
+        else:
+            insert_data = {
+                "nameMedoc": data["nameMedoc"],
+                "catMedoc": data["catMedoc"],
+                "onPrescip": data["onPrescip"],
+                # Spécifier les molécules du médicament
+                "affiliatedOf": [
+                    {
+                        'idOf': ObjectId(officine_id),
+                        'qtyMedoc': data["qtyMedoc"]
+                    }
+                ]
+            }
+            insertion = db['drugs'].insert_one(insert_data)
+            return insertion.acknowledged
+    
+
+    @staticmethod
+    def get_all(officine_id:str) -> any:
+        """
+        Return all drugs data in collection
+        """
+        drugs = db['drugs'].find({
+            "affiliatedOf": {
+                "$elemMatch": {
+                    "idOf": ObjectId(officine_id)
+                }
+            }
+        })
+        list_drugs = []
+        for drug in drugs:
+            copy_drug = dict(drug)
+            for elt in copy_drug['affiliatedOf']:
+                if elt['idOf'] == ObjectId(officine_id):
+                    qty = elt['qtyMedoc']
+                    copy_drug['qty'] = qty
+                    break
+            del copy_drug['affiliatedOf']
+            list_drugs.append(copy_drug)
+        return list_drugs
