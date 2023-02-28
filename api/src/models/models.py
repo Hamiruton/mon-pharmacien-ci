@@ -182,7 +182,7 @@ class Drug:
     
 
     @staticmethod
-    def get_all(officine_id:str) -> any:
+    def get_all_by_officine(officine_id:str) -> any:
         """
         Return all drugs data in collection
         """
