@@ -1,7 +1,7 @@
 """ Import module """
 from flask import request, jsonify
 from src.patient import patient
-from src.models.models import User, get_on_call_pharmacy
+from src.models.models import User, get_on_call_pharmacy, Drug
 from src.constants.url_pharmacies import URL_ABOBO, URL_COCODY, URL_YOPOUGON
 from src.utils.scrap_pharmacies import web_scrap
 
@@ -58,6 +58,16 @@ def set_on_call_clinic():
 
     web_scrap(pharmacies)
     return "Ok"
+
+
+@patient.get('/medocs/<idMedoc>')
+def get_all_clinic_have_drug(idMedoc:str):
+    """
+    Route for get all officines that have idMedoc
+    """
+    res = Drug.get_officine_have_drugs(drug_id=idMedoc)
+    return jsonify(res)
+
 
 @patient.get('/list-pharmacy')
 def get_list_pharmacy():
