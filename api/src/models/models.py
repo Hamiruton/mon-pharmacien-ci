@@ -231,3 +231,23 @@ class Drug:
             del drug['affiliatedOf']
             drug['_id'] = str(drug['_id'])
             return drug
+        
+    
+    @staticmethod
+    def get_officine_have_drugs(drug_id:str) -> DICT_OF_STR:
+        """
+        Return all officines that have at least one quantity of the drug corresponding to the drug id
+        """
+        drug = db['drugs'].find_one({
+            "_id": ObjectId(drug_id)
+        })
+        
+        list_officine = []
+        for officine in drug['affiliatedOf']:
+            if officine['qtyMedoc'] > 0:
+                res_of = db['officine'].find_one({"_id": officine['idOf']})
+                res_of['_id'] = str(res_of['_id'])
+                del res_of['password']
+                list_officine.append(res_of)
+        
+        return list_officine
