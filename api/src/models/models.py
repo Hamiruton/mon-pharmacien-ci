@@ -204,3 +204,30 @@ class Drug:
             del copy_drug['affiliatedOf']
             list_drugs.append(copy_drug)
         return list_drugs
+    
+
+    @staticmethod
+    def get_drug_by_officine(officine_id:str, drug_id: str) -> any:
+        """
+        Return one drug data in collection for officine
+        """
+        drug = db['drugs'].find_one({
+            "_id": ObjectId(drug_id),
+            "affiliatedOf": {
+                "$elemMatch": {
+                    "idOf": ObjectId(officine_id)
+                }
+            }
+        })
+
+        if not drug:
+            return False
+        else:
+            for elt in drug['affiliatedOf']:
+                if elt['idOf'] == ObjectId(officine_id):
+                    qty = elt['qtyMedoc']
+                    drug['qty'] = qty
+                    break
+            del drug['affiliatedOf']
+            drug['_id'] = str(drug['_id'])
+            return drug
