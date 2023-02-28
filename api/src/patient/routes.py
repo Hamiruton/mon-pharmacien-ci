@@ -8,7 +8,7 @@ from src.utils.scrap_pharmacies import web_scrap
 
 @patient.post('/')
 @patient.post('/register')
-def register() -> str:
+def register() -> any:
     """
     Route for registering data
     """
@@ -19,6 +19,21 @@ def register() -> str:
         return make_response(jsonify({"message":"Veuillez entrer un autre nom ou email"}), 200)
     else:
         return make_response(jsonify({"message":res}), 201)
+    
+
+@patient.post('/login')
+def login() -> any:
+    """
+    Route to login user
+    """
+    data = request.get_json()
+    res = User.login(data)
+    if res == "incorrect email":
+        return make_response(jsonify({"message":res}), 200)
+    elif res == "incorrect password":
+        return make_response(jsonify({"message":res}), 200)
+    else:
+        return make_response(jsonify(res), 200)
 
 
 @patient.get('/<user_id>')
