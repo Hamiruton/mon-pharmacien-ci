@@ -179,8 +179,27 @@ class Drug:
             }
             insertion = db['drugs'].insert_one(insert_data)
             return insertion.acknowledged
+
+
+    @staticmethod
+    def get_all_drugs() -> DICT_OF_STR:
+        """
+        Return all drugs data in collection
+        """
+        drugs = db['drugs'].find()
+        list_drugs = []
+        for drug in drugs:
+            copy_drug = dict(drug)
+            del copy_drug['affiliatedOf']
+            drug_id = str(copy_drug['_id'])
+            list_officine = Drug.get_officine_have_drugs(drug_id)
+            copy_drug['_id'] = str(copy_drug['_id'])
+            copy_drug['affiliatedOf'] = list_officine
+            list_drugs.append(copy_drug)
         
-        
+        return list_drugs
+
+
     @staticmethod
     def get_all_drugs_by_officine(officine_id:str) -> any:
         """
