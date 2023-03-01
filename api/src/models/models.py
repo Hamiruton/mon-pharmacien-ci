@@ -131,12 +131,17 @@ class Pharmacy:
 
     def create(self) -> any:
         """
-        Register an officine in database if name and titulaire don't exist in it yet
+        Register an officine in database if titulaire is unique or (name, town) tuple is also unique
         """
-        unique_officine = db['users'].find_one({
-            "$and": [
-                {"name": self.data['name']},
-                {"titulaire": self.data['titulaire']}
+        unique_officine = db['officine'].find_one({
+            "$or": [
+                {"titulaire": self.data['titulaire']},
+                {
+                    "$and": [
+                        {"name": self.data['name']},
+                        {"town": self.data['town']}
+                    ]
+                }
             ]
         })
         if unique_officine:
