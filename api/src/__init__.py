@@ -2,7 +2,6 @@ from flask import Flask
 from flask_cors import CORS
 
 # Call Blueprints
-from src.auth import auth
 from src.patient import patient
 from src.pharmacy import pharmacy
 
@@ -14,7 +13,6 @@ def create_app():
     app.config.from_prefixed_env()
 
     # Load Blueprints
-    app.register_blueprint(auth)
     app.register_blueprint(patient)
     app.register_blueprint(pharmacy)
 
