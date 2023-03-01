@@ -4,6 +4,7 @@ from src.patient import patient
 from src.models.models import User, get_on_call_pharmacy, Drug
 from src.constants.url_pharmacies import URL_ABOBO, URL_COCODY, URL_YOPOUGON
 from src.utils.scrap_pharmacies import web_scrap
+from src.auth import only_patient
 
 
 @patient.post('/')
@@ -33,19 +34,11 @@ def login() -> any:
     elif res == "incorrect password":
         return make_response(jsonify({"message":res}), 200)
     else:
-        return make_response(jsonify(res), 200)
-
-
-@patient.get('/<user_id>')
-def get_user(user_id):
-    """
-    Route for return data by user id
-    """
-    user = User.get_user(user_id)
-    return user
+        return make_response(jsonify({"data": res}), 201)
 
 
 @patient.put('/<user_id>')
+@only_patient
 def update_user(user_id):
     """
     Route for updating data
@@ -56,6 +49,7 @@ def update_user(user_id):
 
 
 @patient.get('/on-call-pharmacy')
+@only_patient
 def get_on_call_clinic():
     """
     Route for return on call pharmacy
@@ -65,6 +59,7 @@ def get_on_call_clinic():
 
 
 @patient.post('/on-call-pharmacy')
+@only_patient
 def set_on_call_clinic():
     """
     Route for set on call pharmacy
@@ -80,6 +75,7 @@ def set_on_call_clinic():
 
 
 @patient.get('/medocs/<idMedoc>')
+@only_patient
 def get_all_clinic_have_drug(idMedoc:str):
     """
     Route for get all officines that have idMedoc
@@ -89,6 +85,7 @@ def get_all_clinic_have_drug(idMedoc:str):
 
 
 @patient.get('/medocs')
+@only_patient
 def get_all_drugs():
     """
     Route for get all officines that have idMedoc
