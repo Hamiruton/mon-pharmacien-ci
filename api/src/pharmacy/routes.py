@@ -2,6 +2,7 @@
 from flask import request, jsonify, make_response
 from src.pharmacy import pharmacy
 from src.models.models import Pharmacy, Drug
+from src.auth import token_required
 
 
 @pharmacy.post('/')
@@ -34,6 +35,7 @@ def login() -> any:
 
 
 @pharmacy.get('/<idOfficine>')
+@token_required('officine')
 def get_officine(idOfficine):
     """
     Route for returning informations about a pharmacy
@@ -42,6 +44,7 @@ def get_officine(idOfficine):
     return jsonify(res)
 
 @pharmacy.post('/<idOfficine>/register-medoc')
+@token_required('officine')
 def register_drugs(idOfficine):
     """
     Route for registering a drug in a pharmacy
@@ -56,23 +59,24 @@ def register_drugs(idOfficine):
 
 
 @pharmacy.get('/<idOfficine>/get-all')
+@token_required('officine')
 def get_all_drugs(idOfficine):
     """
     Route for returning all drugs in a pharmacy
     """
     res = Drug.get_all_drugs_by_officine(idOfficine)
-    print(res)
-    return "jsonify(res)"
+    return make_response(jsonify({"data": res}), 200)
 
 
 @pharmacy.get('/<idOfficine>/<idMedoc>')
+@token_required('officine')
 def get_one_drug(idOfficine, idMedoc):
     """
     Route for returning a particular drug in a pharmacy
     """
     res = Drug.get_drug_by_officine(idOfficine, idMedoc)
     if res == False:
-        return "Impossible, ce médicament n'existe pas dans votre stock"
+        return make_response(jsonify({"message": "Impossible, ce médicament n'existe pas dans votre stock"}), 404)
     else:
-        return res
+        return make_response(jsonify({"data": res}), 200)
     
