@@ -34,6 +34,20 @@ def set_on_call_pharmacy(name_state:str, list_pharmacy: List) -> None:
     })
 
 
+
+def auth_by_id(collection:str, user_id:str) -> bool:
+    """
+    Take collection (users or officine) of DB and user_id as params
+    If 
+    Return user data according to their id
+    """
+    user = db[collection].find_one({"_id": ObjectId(user_id)})
+    if not user:
+        return False
+
+    return True
+
+
 class User:
     """
     In this class, methods which deal with patient data have been gathered
