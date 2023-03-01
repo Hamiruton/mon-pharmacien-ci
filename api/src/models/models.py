@@ -1,6 +1,5 @@
 """Import module"""
 import os
-import json
 import jwt
 from typing import List
 from bson.objectid import ObjectId
@@ -287,6 +286,7 @@ class Drug:
                     copy_drug['qty'] = qty
                     break
             del copy_drug['affiliatedOf']
+            copy_drug['_id'] = str(copy_drug['_id'])
             list_drugs.append(copy_drug)
         return list_drugs
     
