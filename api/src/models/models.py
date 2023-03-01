@@ -156,12 +156,16 @@ class Pharmacy:
         if_exist = db['officine'].find_one({"email": officine_data['email']})
         if if_exist == None:
             return "incorrect email"
-        elif if_exist['password'] != officine_data['password']: # Check if password entered matches with hash password
+        elif not check_password_hash(if_exist['password'], officine_data['password']): # Check if password entered matches with hash password
             return "incorrect password"
         else:
             # Create a token to send to user
             if_exist['_id'] = str(if_exist['_id'])
+            secret_key = os.getenv('FLASK_SECRET_KEY')
+            token = jwt.encode({'public_id': if_exist['_id']}, secret_key)
         
+        del if_exist['password']
+        if_exist['token'] = token
         return if_exist
 
 

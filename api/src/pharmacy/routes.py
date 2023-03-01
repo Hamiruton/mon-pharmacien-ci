@@ -30,7 +30,7 @@ def login() -> any:
     elif res == "incorrect password":
         return make_response(jsonify({"message":res}), 200)
     else:
-        return make_response(jsonify(res), 200)
+        return make_response(jsonify({"data": res}), 201)
 
 
 @pharmacy.get('/<idOfficine>')
