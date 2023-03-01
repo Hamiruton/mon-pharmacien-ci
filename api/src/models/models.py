@@ -1,7 +1,10 @@
 """Import module"""
+import os
 import json
+import jwt
 from typing import List
 from bson.objectid import ObjectId
+from werkzeug.security import generate_password_hash, check_password_hash
 from src.config.db import get_database
 from src.constants.complex_types import DICT_OF_STR
 
@@ -61,6 +64,7 @@ class User:
         if unique_user:
             return False
         else:
+            self.data['password'] = generate_password_hash(self.data['password'])
             insertion = db['users'].insert_one(self.data)
             return insertion.acknowledged
         
@@ -70,23 +74,17 @@ class User:
         verify_user = db['users'].find_one({"email": user_data['email']})
         if verify_user == None:
             return "incorrect email"
-        elif verify_user['password'] != user_data['password']: # Check if password entered matches with hash password
+        elif not check_password_hash(verify_user['password'], user_data['password']): # Check if password entered matches with hash password
             return "incorrect password"
         else:
-            # Create a token to send to user
             verify_user['_id'] = str(verify_user['_id'])
+            secret_key = os.getenv('FLASK_SECRET_KEY')
+            token = jwt.encode({'public_id': verify_user['_id']}, secret_key)
         
+        del verify_user['password']
+        verify_user['token'] = token
         return verify_user
 
-
-    @staticmethod
-    def get_user(user_id:str) -> DICT_OF_STR:
-        """
-        Return user data according to their id
-        """
-        user = db['users'].find_one({"_id": ObjectId(user_id)})
-        user['_id'] = str(user['_id'])
-        return user
 
     @staticmethod
     def update_user(user_id:str, update_data:DICT_OF_STR) -> int:
