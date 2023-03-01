@@ -5,15 +5,17 @@ from src.models.models import Pharmacy, Drug
 
 
 @pharmacy.post('/')
-def register_officine():
+def register_officine() -> any:
     """
     Route for registering a pharmacy
     """
     data = request.get_json()
     officine = Pharmacy(data)
     res = officine.create()
-    print(res)
-    return "res"
+    if res == False:
+        return make_response(jsonify({"message":"Veuillez entrer un autre nom ou email"}), 200)
+    
+    return make_response(jsonify({"message":res}), 201)
 
 
 @pharmacy.post('/login')

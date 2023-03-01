@@ -131,8 +131,17 @@ class Pharmacy:
 
     def create(self) -> any:
         """
-        Register data in collection
+        Register an officine in database if name and titulaire don't exist in it yet
         """
+        unique_officine = db['users'].find_one({
+            "$and": [
+                {"name": self.data['name']},
+                {"titulaire": self.data['titulaire']}
+            ]
+        })
+        if unique_officine:
+            return False
+        self.data['password'] = generate_password_hash(self.data['password'])
         insertion = db['officine'].insert_one(self.data)
         return insertion.acknowledged
     
