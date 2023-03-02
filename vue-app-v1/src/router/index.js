@@ -12,6 +12,7 @@ import HandleStock from "../views/officine/HandleStock";
 import HandlePrescrip from "../views/officine/HandlePrescrip";
 import Historic from "../views/officine/Historic";
 import SalesStats from "../views/officine/SalesStats";
+import ReceivePrescrip from '../views/officine/ReceivePrescrip';
 
 
 const routes = [
@@ -70,6 +71,11 @@ const routes = [
     path: '/officine/stats',
     name: 'stats',
     component: SalesStats
+  },
+  {
+    path: '/officine/gestion-ordonnance/ord-recus',
+    name: 'receivePrescrip',
+    component: ReceivePrescrip
   },
 ];
 
