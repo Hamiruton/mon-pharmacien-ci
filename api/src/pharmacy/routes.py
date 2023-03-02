@@ -80,3 +80,16 @@ def get_one_drug(idOfficine, idMedoc):
     else:
         return make_response(jsonify({"data": res}), 200)
     
+
+@pharmacy.get('/stock/<idOfficine>')
+@token_required('officine')
+def get_one_cat_drugs(idOfficine):
+    """
+    Route for returning all drugs categories an officine has
+    """
+    res = Drug.get_cat_drugs_by_officine(idOfficine)
+    if res == False:
+        return make_response(jsonify({"message": "Impossible, Vous n'avez pas de stock"}), 404)
+    else:
+        return make_response(jsonify({"data": res}), 200)
+    
