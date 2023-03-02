@@ -22,7 +22,7 @@
                 <v-sheet class="child2 py-16" max-height="80vh" rounded="lg" elevation="5">
                     <DisplayInList content="Paracetamol">
                         <template #actions>
-                            <v-btn icon="mdi-eye" color="teal-lighten-3" variant="tonal"></v-btn>
+                            <SeeMoreDrugBtn drug="Paracetamol" />
                             <DeleteDrugBtn drug="Paracetamol" />
                         </template>
                     </DisplayInList>
@@ -35,12 +35,14 @@
 <script>
     import DisplayInList from './DisplayInList.vue';
     import DeleteDrugBtn from './DeleteDrugBtn.vue';
+    import SeeMoreDrugBtn from './SeeMoreDrugBtn.vue';
     export default {
         name: "CategDrug",
         props: ['categ'],
         components: {
             DisplayInList,
             DeleteDrugBtn,
+            SeeMoreDrugBtn
         },
         data() {
             return {
