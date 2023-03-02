@@ -22,8 +22,8 @@
                 <v-sheet class="child2 py-16" max-height="80vh" rounded="lg" elevation="5">
                     <DisplayInList content="Paracetamol">
                         <template #actions>
-                            <v-btn icon="mdi-eye" color="teal-lighten-3" variant="elevated"></v-btn>
-                            <v-btn icon="mdi-delete" color="error" variant="elevated"></v-btn>
+                            <v-btn icon="mdi-eye" color="teal-lighten-3" variant="tonal"></v-btn>
+                            <DeleteDrugBtn drug="Paracetamol" />
                         </template>
                     </DisplayInList>
                 </v-sheet>
@@ -34,10 +34,14 @@
 
 <script>
     import DisplayInList from './DisplayInList.vue';
+    import DeleteDrugBtn from './DeleteDrugBtn.vue';
     export default {
         name: "CategDrug",
         props: ['categ'],
-        components: {DisplayInList},
+        components: {
+            DisplayInList,
+            DeleteDrugBtn,
+        },
         data() {
             return {
                 dialog: false,
