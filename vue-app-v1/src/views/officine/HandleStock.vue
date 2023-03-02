@@ -4,9 +4,7 @@
             <h1 class="leadTitle">gestion du stock de l'officine</h1>
             <v-sheet min-height="50vh" class="grid">
                 <v-col v-for="cat, index in categoryDrug" :key="index">
-                    <v-btn class="w-100 h-100 text-h6" rounded="lg" color="teal-lighten-3">
-                        <span class="cat-btn">{{ cat }}</span>
-                    </v-btn>
+                    <CategDrug :categ="cat" />
                 </v-col>
             </v-sheet>
         </v-sheet>
@@ -14,8 +12,12 @@
 </template>
 
 <script>
+    import CategDrug from '@/components/CategDrug.vue';
     export default {
         name: "HandleStock",
+        components: {
+            CategDrug
+        },
         data() {
             return {
                 categoryDrug: [
@@ -31,7 +33,8 @@
                 ]
             }
         },
-        
+        methods: {
+        }
     }
 </script>
 
