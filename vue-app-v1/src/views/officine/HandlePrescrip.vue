@@ -4,7 +4,7 @@
             <h1 class="leadTitle">gestion du stock de l'officine</h1>
             <v-sheet min-height="50vh" class="grid mt-16">
                 <v-col>
-                    <v-btn class="w-100 h-50 text-h6" rounded="lg" color="teal-lighten-3">
+                    <v-btn class="w-100 h-50 text-h6" rounded="lg" color="teal-lighten-3" :to="{ name: 'receivePrescrip'}">
                         ORDONNANCES REÇUES
                     </v-btn>
                 </v-col>
