@@ -61,13 +61,13 @@
         return {
             contreIndic: false,
             listContraIndic: [
-                {'nom':''},
+                {nom:''},
             ]
         }
     },
     methods: {
         addcontreIndic() {
-            this.listContraIndic.push({'nom':''});
+            this.listContraIndic.push({nom:''});
         },
 
         delcontreIndic() {

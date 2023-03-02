@@ -9,7 +9,7 @@
                     </v-btn>
                 </v-col>
                 <v-col>
-                    <v-btn class="w-100 h-50 text-h6" rounded="lg" color="teal-lighten-3">
+                    <v-btn class="w-100 h-50 text-h6" rounded="lg" color="teal-lighten-3" :to="{ name: 'registerOrd'}">
                         ENREGISTRER ORDONNANCE
                     </v-btn>
                 </v-col>
