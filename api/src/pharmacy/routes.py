@@ -53,9 +53,9 @@ def register_drugs(idOfficine):
     drugs = Drug()
     res = drugs.saveD(data, idOfficine)
     if res == False:
-        return "Impossible, vous avez déjà enregistré ce médicament"
+        return make_response({"message": "Impossible, vous avez déjà enregistré ce médicament"}, 404)
     else:
-        return jsonify(res)
+        return make_response({"data": jsonify(res)}, 201)
 
 
 @pharmacy.get('/<idOfficine>/get-all')
