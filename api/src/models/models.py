@@ -336,3 +336,27 @@ class Drug:
                 list_officine.append(res_of)
         
         return list_officine
+    
+
+    @staticmethod
+    def get_cat_drugs_by_officine(officine_id:str) -> List:
+        """
+        Return all drugs categories an officine has
+        """
+        cat_drugs = []
+        results = db['drugs'].find({
+            "affiliatedOf": {
+                "$elemMatch": {
+                    "idOf": ObjectId(officine_id)
+                }
+            }
+        })
+
+        if not results:
+            return False
+        
+        for res in results:
+            cat_drugs.append(res['catMedoc'])
+        
+        cat_drugs = list(set(cat_drugs))
+        return cat_drugs
