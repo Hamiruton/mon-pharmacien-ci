@@ -230,11 +230,14 @@ class Drug:
             )
             return insertion.acknowledged
         else:
+            idMol = db['molecule'].find_one({"nameMol": data["nameMol"]})
+            if not idMol:
+                return False
             insert_data = {
                 "nameMedoc": data["nameMedoc"],
                 "catMedoc": data["catMedoc"],
                 "onPrescip": data["onPrescip"],
-                # Spécifier les molécules du médicament
+                "idMol": idMol['_id'],
                 "affiliatedOf": [
                     {
                         'idOf': ObjectId(officine_id),
@@ -259,6 +262,7 @@ class Drug:
             drug_id = str(copy_drug['_id'])
             list_officine = Drug.get_officine_have_drugs(drug_id)
             copy_drug['_id'] = str(copy_drug['_id'])
+            copy_drug['idMol'] = str(copy_drug['idMol'])
             copy_drug['affiliatedOf'] = list_officine
             list_drugs.append(copy_drug)
         
@@ -287,7 +291,11 @@ class Drug:
                     break
             del copy_drug['affiliatedOf']
             copy_drug['_id'] = str(copy_drug['_id'])
+            copy_drug['idMol'] = str(copy_drug['idMol'])
             list_drugs.append(copy_drug)
+        
+        if len(list_drugs) == 0:
+            return False
         return list_drugs
     
 
@@ -315,6 +323,7 @@ class Drug:
                     break
             del drug['affiliatedOf']
             drug['_id'] = str(drug['_id'])
+            drug['idMol'] = str(drug['idMol'])
             return drug
         
     

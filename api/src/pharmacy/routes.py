@@ -55,7 +55,7 @@ def register_drugs(idOfficine):
     if res == False:
         return make_response({"message": "Impossible, vous avez déjà enregistré ce médicament"}, 404)
     else:
-        return make_response({"data": jsonify(res)}, 201)
+        return make_response({"data": res}, 201)
 
 
 @pharmacy.get('/<idOfficine>/get-all')
@@ -65,6 +65,8 @@ def get_all_drugs(idOfficine):
     Route for returning all drugs in a pharmacy
     """
     res = Drug.get_all_drugs_by_officine(idOfficine)
+    if res == False:
+        return make_response(jsonify({"message": "Aucun médicament en stock"}), 200)
     return make_response(jsonify({"data": res}), 200)
 
 
