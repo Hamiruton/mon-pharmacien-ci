@@ -4,19 +4,21 @@
 
             <h2 class="login-form__title">Connexion</h2>
 
-            <div class="login-form__body">
-                <div class="field">
-                <label for="email">Adresse email</label>
-                <input id="email" v-model="email" type="email" name="email" placeholder="Adresse email" />
-                </div>
+            <v-text-field v-model="email" clearable label="Email" variant="outlined" class="w-100"></v-text-field>
+            <v-text-field v-model="password" clearable label="Password" type="password" variant="outlined" class="w-100"></v-text-field>
+            <v-select label="Profil" v-model="profil" clearable :items="['patient', 'officine']" variant="outlined" class="w-100"></v-select>
 
-                <div class="field">
-                <label for="password">Mot de passe</label>
-                <input id="password" v-model="password" type="password" name="password" placeholder="***" />
-                </div>
-            </div>
+            <v-btn type="submit" color="teal-darken-4" class="h-100">Se connecter</v-btn>
 
-            <button type="submit">Se connecter</button>
+            <v-snackbar v-model="snackbar" :color="typeAlert" :timeout="timeout">
+                <v-alert :type="typeAlert" :text="textSnackbar"></v-alert>
+            </v-snackbar>
+
+            <v-row class="mt-5">
+                <v-col>
+                    <p class="text-down">Pas encore inscrit ? <a href="/register">Inscrivez-vous</a> | <a href="#">Mot de passe oublié</a></p>
+                </v-col>
+            </v-row>
         </form>
     </main>
 </template>
@@ -26,8 +28,13 @@
         name: 'LoginView',
         data() {
             return {
+                snackbar: false,
+                timeout: 3000,
+                textSnackbar: '',
+                typeAlert: '',
                 email: null,
                 password: null,
+                profil: 'patient',
             }
         },
         beforeMount() {
@@ -35,28 +42,47 @@
         },
         methods: {
             async login() {
-            const credentials = {
-                email: this.email,
-                password: this.password,
-            };
+                const credentials = {
+                    email: this.email,
+                    password: this.password,
+                };
 
-            try {
-                const response = await axios.post('https://api.pros.cards/auth/login', credentials);
-                const user = response.data.data;
+                const host = this.profil === 'patient' ? 'client' : 'officine';
 
-                if (user.role !== 'ADMIN') {
-                throw new Error("Vous n'êtes pas autorisé à vous connecter.");
+                try {
+                    const response = await this.$axios.post(`/${host}/login`, credentials);
+                    const user = response.data.data;
+                    console.log(user);
+                    const token = user.token;
+                    delete user.token;
+
+                    if (response.data.message) {
+                        this.textSnackbar = user.message;
+                        this.typeAlert = "warning";
+                        this.timeout = 6000;
+                        this.snackbar = true;
+                        return
+                    }
+
+                    await this.$store.dispatch('login', { user, token });
+                    if (host === "officine") {
+                        await this.$router.push('/officine/homeOfficine');
+                        return
+                    }
+                    await this.$router.push('/');
+                } catch (error) {
+                    if (error.response) {
+                        this.textSnackbar = error.response.data.error;
+                        this.typeAlert = "error";
+                        this.snackbar = true;
+                        return
+                    } else {
+                        this.textSnackbar = error;
+                        this.typeAlert = "error";
+                        this.snackbar = true;
+                        return
+                    }
                 }
-
-                this.$store.dispatch('login', { user, token: user.token });
-                this.$router.go();
-            } catch (error) {
-                if (error.response) {
-                alert(error.response.data.error);
-                } else {
-                alert(error);
-                }
-            }
             },
         },
     }
@@ -71,6 +97,20 @@
         place-items: center;
     }
 
+    .text-down {
+        font-style: italic;
+    }
+
+    .text-down a {
+        color: #2b2b2b;
+        text-decoration: none;
+
+        &:hover {
+            color: #4db6ac;
+        }
+    }
+    
+
     .login-form {
         background-color: white;
         padding: 3em 5em;
@@ -83,42 +123,12 @@
     .login-form__title {
         text-transform: uppercase;
         font-size: 5em;
-    }
-
-    .login-form__body {
-        margin-block: 1.5em;
-        width: 100%;
-    }
-
-    .field {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-block: 1em;
-    }
-
-    .field label {
-        font-weight: 300;
-    }
-
-    .field input {
-        padding: 10px 20px;
-        border-radius: 60px;
-        border: 1px solid #a59fbf;
-        text-align: center;
+        margin-bottom: 25px;
     }
 
     button {
-        $bg-color: #2b2b2b;
-        background-color: $bg-color;
-        color: #a59fbf;
         border-radius: 60px;
         padding-block: 15px;
         width: 100%;
-        transition: background-color 300ms;
-
-        &:hover {
-            background-color: darken($bg-color, 15);
-        }
     }
 </style>
