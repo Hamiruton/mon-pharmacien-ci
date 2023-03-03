@@ -57,7 +57,6 @@ export default {
             this.dialog = !this.dialog;
         },
         logout() {
-            localStorage.clear();
             this.$store.dispatch('logout');
             this.$router.push('/login')
         }
