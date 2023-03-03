@@ -1,7 +1,7 @@
 """ Import module """
 from flask import request, jsonify, make_response
 from src.pharmacy import pharmacy
-from src.models.models import Pharmacy, Drug
+from src.models.models import Pharmacy, Drug, Molecule
 from src.auth import token_required
 
 
@@ -95,3 +95,14 @@ def get_one_cat_drugs(idOfficine):
     else:
         return make_response(jsonify({"data": res}), 200)
     
+
+@pharmacy.get('/molecules/get-all')
+def get_all_mol():
+    """
+    Route for returning all molecules in db
+    """
+    res = Molecule.get_all_mol()
+    if res == False:
+        return make_response(jsonify({"message": "Il n'existe aucune molécule enregistrée"}), 404)
+    else:
+        return make_response(jsonify({"data": res}), 200)

@@ -369,3 +369,25 @@ class Drug:
         
         cat_drugs = list(set(cat_drugs))
         return cat_drugs
+    
+
+class Molecule:
+    """
+    In this class, methods which deal with molecules data have been gathered
+    """
+
+    @staticmethod
+    def get_all_mol() -> DICT_OF_STR:
+        """
+        Return all molecules data in collection
+        """
+        molecules = db['molecule'].find()
+        list_molecules = []
+        for mol in molecules:
+            copy_mol = dict(mol)
+            copy_mol['_id'] = str(copy_mol['_id'])
+            list_molecules.append(copy_mol)
+
+        if len(list_molecules) == 0:
+            return False
+        return list_molecules
