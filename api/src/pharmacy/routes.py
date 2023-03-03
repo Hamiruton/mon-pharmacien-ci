@@ -106,3 +106,15 @@ def get_all_mol():
         return make_response(jsonify({"message": "Il n'existe aucune molécule enregistrée"}), 404)
     else:
         return make_response(jsonify({"data": res}), 200)
+    
+
+@pharmacy.get('/stock/<idOfficine>/<categName>')
+def get_all_drugs_by_categ(idOfficine, categName):
+    """
+    Route for returning all drugs according to drugs categories
+    """
+    res = Drug.get_drugs_by_cat_drugs_for_officine(idOfficine, categName)
+    if res == False:
+        return make_response(jsonify({"message": f"Il n'existe aucune médicament enregistrée dans {categName}"}), 404)
+    else:
+        return make_response(jsonify({"data": res}), 200)
