@@ -4,67 +4,92 @@
 
             <h2 class="register-form__title">Inscription</h2>
 
-            <div class="register-form__body">
-                <div class="field">
-                    <label for="fullname">Nom complet</label>
-                    <input id="fullname" v-model="fullname" type="text" name="fullname" placeholder="Entrer votre nom complet" />
-                </div>
+            
+            <v-select label="Profil" v-model="profil" :items="['patient', 'officine']" variant="outlined" class="w-100"></v-select>
 
+            <div class="w-100" v-if="profil=== 'patient'">
                 <v-row>
-                    <v-col>
-                        <div class="field">
-                            <label for="sex">Sexe</label>
-                            <v-select :items="['Homme', 'Femme']" variant="outlined" density="comfortable"></v-select>
-                        </div>
-                    </v-col>
-
-                    <v-col>
-                        <div class="field">
-                            <label for="birthday">Date de naissance</label>
-                            <input id="birthday" v-model="birthday" type="date" name="birthday" placeholder="" />
-                        </div>
+                    <v-col cols="12">
+                        <v-text-field v-model="dataPatient.fullname" label="Nom complet" variant="outlined" clearable></v-text-field>
                     </v-col>
                 </v-row>
-
-                <div class="field">
-                    <label for="email">Email</label>
-                    <input id="email" v-model="email" type="text" name="email" placeholder="Entrer votre email" />
-                </div>
-
                 <v-row>
-                    <v-col>
-                        <div class="field">
-                            <label for="phone">Numéro</label>
-                            <input id="phone" v-model="phone" type="text" name="phone" placeholder="Entrer votre numéro" />
-                        </div>
+                    <v-col cols="6">
+                        <v-select v-model="dataPatient.sex" label="Sexe" :items="['Homme', 'Femme']" variant="outlined" clearable></v-select>
                     </v-col>
-
-                    <v-col>
-                        <div class="field">
-                            <label for="commune">Commune</label>
-                            <input id="commune" v-model="commune" type="text" name="commune" placeholder="Entrer votre commune" />
-                        </div>
+                    <v-col cols="6">
+                        <v-text-field v-model="dataPatient.birthday" type="date" label="Date de naissance" variant="outlined" clearable></v-text-field>
                     </v-col>
                 </v-row>
-
                 <v-row>
-                    <v-col>
-                        <div class="field">
-                            <label for="password">Mot de passe</label>
-                            <input id="password" v-model="password" type="password" name="password" placeholder="Entrer votre mot de passe" />
-                        </div>
+                    <v-col cols="12">
+                        <v-text-field v-model="dataPatient.email" label="Email" variant="outlined" clearable></v-text-field>
                     </v-col>
-
-                    <v-col>
-                        <div class="field">
-                            <label for="confirm__password">Confirmer mot de passe</label>
-                            <input id="confirm__password" v-model="confirm__password" type="password" name="confirm__password" placeholder="Entrer à nouveau le mot de passe" />
-                        </div>
+                </v-row>
+                <v-row>
+                    <v-col cols="6">
+                        <v-text-field v-model="dataPatient.phone" label="Numéro" variant="outlined" clearable></v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                        <v-text-field v-model="dataPatient.town" label="Commune" variant="outlined" clearable></v-text-field>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col cols="6">
+                        <v-text-field v-model="dataPatient.password" type="password" label="Mot de passe" variant="outlined" clearable></v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                        <v-text-field v-model="confirmPwdPatient" type="password" label="Confirmer mot de passe" variant="outlined" clearable></v-text-field>
                     </v-col>
                 </v-row>
             </div>
 
-            <button type="submit">S'inscrire</button>
+
+            <div class="w-100" v-if="profil=== 'officine'">
+                <v-row>
+                    <v-col cols="12">
+                        <v-text-field v-model="dataOfficine.name" label="Nom officine" variant="outlined" clearable></v-text-field>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col cols="12">
+                        <v-text-field v-model="dataOfficine.titulaire" label="Nom du titulaire" variant="outlined" clearable></v-text-field>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col cols="12">
+                        <v-text-field v-model="dataOfficine.email" label="Email" variant="outlined" clearable></v-text-field>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col cols="6">
+                        <v-text-field v-model="dataOfficine.phone" label="Numéro" variant="outlined" clearable></v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                        <v-text-field v-model="dataOfficine.town" label="Commune" variant="outlined" clearable></v-text-field>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col cols="6">
+                        <v-text-field v-model="dataOfficine.password" type="password" label="Mot de passe" variant="outlined" clearable></v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                        <v-text-field v-model="confirmPwdOfficine" type="password" label="Confirmer mot de passe" variant="outlined" clearable></v-text-field>
+                    </v-col>
+                </v-row>
+            </div>
+            
+            <v-btn type="submit" color="teal-darken-4" class="h-100">S'inscrire</v-btn>
+            <v-snackbar v-model="snackbar" :color="typeAlert" :timeout="timeout">
+                <v-alert :type="typeAlert" :text="textSnackbar"></v-alert>
+            </v-snackbar>
+
+            <v-row class="mt-5">
+                <v-col>
+                    <p class="text-down">Déjà inscrit ? <a href="/login">Connectez-vous</a></p>
+                </v-col>
+            </v-row>
+            
         </form>
     </main>
 </template>
@@ -74,8 +99,30 @@
         name: 'RegisterView',
         data() {
             return {
-                email: null,
-                password: null,
+                snackbar: false,
+                timeout: 3000,
+                textSnackbar: '',
+                typeAlert: '',
+                profil: 'patient',
+                confirmPwdPatient: '',
+                confirmPwdOfficine: '',
+                dataPatient: {
+                    fullname: '',
+                    sex: '',
+                    birthday: '',
+                    email: '',
+                    phone: '',
+                    town: '',
+                    password: '',
+                },
+                dataOfficine: {
+                    name: '',
+                    titulaire: '',
+                    email: '',
+                    phone: '',
+                    town: '',
+                    password: '',
+                },
             }
         },
         beforeMount() {
@@ -83,28 +130,54 @@
         },
         methods: {
             async register() {
-            const credentials = {
-                email: this.email,
-                password: this.password,
-            };
-
-            try {
-                const response = await axios.post('https://api.pros.cards/auth/login', credentials);
-                const user = response.data.data;
-
-                if (user.role !== 'ADMIN') {
-                throw new Error("Vous n'êtes pas autorisé à vous connecter.");
+                if (this.profil === 'patient' && this.dataPatient.password !== this.confirmPwdPatient) {
+                    this.textSnackbar = "Les mots de passe ne concordent pas, réessayez !!!";
+                    this.typeAlert = "error";
+                    this.snackbar = true;
+                    return
                 }
 
-                this.$store.dispatch('login', { user, token: user.token });
-                this.$router.go();
-            } catch (error) {
-                if (error.response) {
-                alert(error.response.data.error);
-                } else {
-                alert(error);
+                if (this.profil === 'officine' && this.dataOfficine.password !== this.confirmPwdOfficine) {
+                    this.textSnackbar = "Les mots de passe ne concordent pas, réessayez !!!";
+                    this.typeAlert = "error";
+                    this.snackbar = true;
+                    return
                 }
-            }
+
+                const credentials = this.profil === 'patient' ? this.dataPatient : this.dataOfficine;
+
+                const host = this.profil === 'patient' ? 'client' : 'officine';
+
+                try {
+                    const response = await this.$axios.post(`/${host}/register`, credentials);
+                    const user = response.data;
+                    console.log(user.message === true);
+                    if (user.message !== true) {
+                        this.textSnackbar = user.message;
+                        this.typeAlert = "warning";
+                        this.timeout = 6000;
+                        this.snackbar = true;
+                        return
+                    }
+                    this.textSnackbar = "Inscription réussie";
+                    this.typeAlert = "success";
+                    this.timeout = 6000;
+                    this.snackbar = true;
+                    await this.$router.push('/login');
+
+                } catch (error) {
+                    if (error.response) {
+                        this.textSnackbar = error.response.data.error;
+                        this.typeAlert = "error";
+                        this.snackbar = true;
+                        return
+                    } else {
+                        this.textSnackbar = error;
+                        this.typeAlert = "error";
+                        this.snackbar = true;
+                        return
+                    }
+                }
             },
         },
     }
@@ -114,7 +187,7 @@
     main {
         width: 100vw;
         height: 100vh;
-        background-color: #f8c891;
+        background-color: #4db6ac;
         display: grid;
         place-items: center;
     }
@@ -133,40 +206,23 @@
         font-size: 5em;
     }
 
-    .register-form__body {
-        margin-block: 1.5em;
-        width: 100%;
+    .text-down {
+        font-style: italic;
     }
 
-    .field {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        margin-block: 0.5em;
-    }
+    .text-down a {
+        color: #2b2b2b;
+        text-decoration: none;
 
-    .field label {
-        font-weight: 300;
-    }
-
-    .field input {
-        padding: 10px 20px;
-        border-radius: 60px;
-        border: 1px solid #a59fbf;
-        text-align: center;
+        &:hover {
+            color: #4db6ac;
+        }
     }
 
     button {
-        $bg-color: #2b2b2b;
-        background-color: $bg-color;
-        color: #a59fbf;
         border-radius: 60px;
         padding-block: 15px;
         width: 100%;
         transition: background-color 300ms;
-
-        &:hover {
-            background-color: darken($bg-color, 15);
-        }
     }
 </style>
