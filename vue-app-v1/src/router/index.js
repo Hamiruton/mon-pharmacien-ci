@@ -90,4 +90,16 @@ const router = createRouter({
   routes
 });
 
+router.beforeEach((to, from, next) => {
+  
+  if (!localStorage.getItem('token') && to.name !== 'login') {
+    next({name: 'login'})
+  } else {
+    next()
+  }
+  if (to.matched.length < 1) {
+    return {name: 'home'};
+  }
+});
+
 export default router;
