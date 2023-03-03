@@ -361,15 +361,47 @@ class Drug:
             }
         })
 
-        if not results:
-            return False
-        
         for res in results:
             cat_drugs.append(res['catMedoc'])
         
         cat_drugs = list(set(cat_drugs))
+        
+        if len(cat_drugs) == 0:
+            return False
         return cat_drugs
     
+
+    @staticmethod
+    def get_drugs_by_cat_drugs_for_officine(officine_id:str, cat_drug:str) -> List:
+        """
+        Return all drugs to an officine according to drugs categories
+        """
+        results = db['drugs'].find({
+            "$and": [
+                {"catMedoc": cat_drug},
+                {"affiliatedOf": {
+                    "$elemMatch": {
+                        "idOf": ObjectId(officine_id)
+                    }
+                }}
+            ]
+        })
+        list_drugs = []
+        for drug in results:
+            copy_drug = dict(drug)
+            for elt in copy_drug['affiliatedOf']:
+                if elt['idOf'] == ObjectId(officine_id):
+                    copy_drug['qty'] = elt['qtyMedoc']
+                    break
+            del copy_drug['affiliatedOf']
+            copy_drug['_id'] = str(copy_drug['_id'])
+            copy_drug['idMol'] = str(copy_drug['idMol'])
+            list_drugs.append(copy_drug)
+    
+        if len(list_drugs) == 0:
+            return False
+        return list_drugs
+
 
 class Molecule:
     """
