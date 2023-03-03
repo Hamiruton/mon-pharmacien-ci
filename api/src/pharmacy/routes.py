@@ -6,6 +6,7 @@ from src.auth import token_required
 
 
 @pharmacy.post('/')
+@pharmacy.post('/register')
 def register_officine() -> any:
     """
     Route for registering a pharmacy

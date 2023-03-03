@@ -96,6 +96,7 @@ def get_all_drugs():
 
 
 @patient.get('/list-pharmacy')
+@token_required('users')
 def get_list_pharmacy():
     """
     Route for test with vue app
