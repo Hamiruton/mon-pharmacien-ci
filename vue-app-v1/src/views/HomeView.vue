@@ -4,7 +4,15 @@
             min-height="70vh"
             rounded="lg"
         >
+            <v-progress-circular
+                v-if="liste == null"
+                color="teal-lighten-3"
+                indeterminate
+                :size="128"
+                :width="5"
+            ></v-progress-circular>
             <TableData
+                v-else
                 :listPharmacy="liste"
                 tableHeight="70vh"
                 clickCell="clickCellHome"
@@ -20,37 +28,6 @@
         components: { TableData },
         data() {
             return {
-                listMedocs: [
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                    {nomC: "Medicament 1", nomS: "Benzebol", molecule: "De Methyle aryzoboique"},
-                ],
                 liste: null
             }
         },
