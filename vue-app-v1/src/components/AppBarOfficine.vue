@@ -11,15 +11,21 @@
                             image="https://randomuser.me/api/portraits/women/25.jpg"
                             size="32"
                         ></v-avatar>
-                        <span class="ml-3">Nom Officine</span>
+                        <span class="ml-3">{{ data.name }}</span>
                     </div>
                 </template>
                 <v-list>
-                    <v-list-item
-                        v-for="n in 5"
-                        :key="n"
-                    >
-                        <v-list-item-title>Informations {{ n }}</v-list-item-title>
+                    <v-list-item prepend-icon="mdi-account-circle">
+                        <v-list-item-title v-text="data.titulaire"></v-list-item-title>
+                    </v-list-item>
+                    <v-list-item prepend-icon="mdi-email">
+                        <v-list-item-title v-text="data.email"></v-list-item-title>
+                    </v-list-item>
+                    <v-list-item prepend-icon="mdi-phone">
+                        <v-list-item-title v-text="data.phone"></v-list-item-title>
+                    </v-list-item>
+                    <v-list-item prepend-icon="mdi-city">
+                        <v-list-item-title v-text="data.town"></v-list-item-title>
                     </v-list-item>
 
                     <v-divider class="my-2"></v-divider>
@@ -41,6 +47,13 @@ export default {
     name: "AppBarOfficine",
     data() {
         return {
+            data: {
+                name: null,
+                titulaire: null,
+                phone: null,
+                town: null,
+                email: null
+            },
         }
     },
     props: {
@@ -48,6 +61,11 @@ export default {
             default: "PHARMA APP",
             type: String
         }
+    },
+    created() {
+        const result = this.$store.getters.user;
+        console.log(result)
+        this.data = result;
     },
     methods: {
         toggleDialog() {

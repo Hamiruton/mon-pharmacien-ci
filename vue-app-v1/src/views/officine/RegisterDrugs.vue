@@ -1,22 +1,28 @@
 <template>
     <LayoutOfficine>
-        <v-sheet min-height="70vh" rounded="lg" class="pa-16" elevation="5">
+        <v-sheet height="70vh" rounded="lg" class="pa-16" style="overflow: scroll;" elevation="5">
             <h1 class="leadTitle">enregistrement de médicament</h1>
             <v-container class="px-16">
                 <v-row class="px-16">
                     <v-col class="px-16" cols="12">
-                        <v-text-field label="Nom du médicament" variant="solo"></v-text-field>
+                        <v-text-field v-model="box.nameMedoc" label="Nom du médicament" variant="solo"></v-text-field>
                     </v-col>
                     <v-col class="px-16" cols="12">
-                        <v-text-field label="Molécule" variant="solo"></v-text-field>
+                        <v-select v-model="box.nameMol" :items="itemsM" label="Molécule" variant="solo" clearable></v-select>
                     </v-col>
                     <v-col class="px-16" cols="12">
-                        <v-text-field label="Famille" variant="solo"></v-text-field>
+                        <v-select v-model="box.catMedoc" :items="itemsF" label="Famille" variant="solo" clearable></v-select>
                     </v-col>
                     <v-col class="px-16" cols="12">
-                        <v-text-field label="Quantité" variant="solo"></v-text-field>
+                        <v-text-field v-model="box.qtyMedoc" label="Quantité" variant="solo"></v-text-field>
+                    </v-col>
+                    <v-col class="px-16" cols="12">
+                        <v-checkbox label="Sur prescription ?" color="teal-lighten-3" v-model="box.onPrescip"></v-checkbox>
                     </v-col>
                 </v-row>
+                <v-snackbar v-model="snackbar" :color="typeAlert" :timeout="timeout">
+                <v-alert :type="typeAlert" :text="textSnackbar"></v-alert>
+            </v-snackbar>
                 <v-checkbox label="Contre-indications ?" color="teal-lighten-3" v-model="contreIndic"></v-checkbox>
                 <v-row v-if="contreIndic" class="px-16" no-gutters>
                     <v-col class="px-16" cols="10" v-for="liste, index in listContraIndic" :key="index">
@@ -59,11 +65,28 @@
     name: "RegisterDrugs",
     data() {
         return {
+            box: {
+                nameMedoc: null,
+                catMedoc: null,
+                nameMol: null,
+                onPrescip: null,
+                qtyMedoc: null,
+            },
             contreIndic: false,
+            itemsM: [],
+            itemsF: [],
             listContraIndic: [
                 {nom:''},
-            ]
+            ],
+            snackbar: false,
+            timeout: 3000,
+            textSnackbar: '',
+            typeAlert: '',
         }
+    },
+    async mounted() {
+        this.itemsM = await this.$store.dispatch('getAllMolecules', { axios: this.$axios });
+        this.itemsF = await this.$store.dispatch('getAllDrugCat', { axios: this.$axios });
     },
     methods: {
         addcontreIndic() {
@@ -74,8 +97,40 @@
             this.listContraIndic.splice(-1, 1);
         },
 
-        saveDrugs() {
-            // Write function to save drugs in the database
+        toLower(obj) {
+            for (let o in obj) {
+                o = o.toLowerCase();
+            }
+        },
+
+        async saveDrugs() {
+            try {
+                const idOfficine = this.$store.getters.idUser;
+                const response = (await this.$axios.post(`/officine/${idOfficine}/register-medoc`, this.box)).data;
+                console.log(response)
+                
+                if (response.data === true) {
+                    this.textSnackbar = "L'enregistrement a bien été effectué";
+                    this.typeAlert = "success";
+                    this.timeout = 6000;
+                    this.snackbar = true;
+                } else {
+                    this.textSnackbar = response.message;
+                    this.typeAlert = "error";
+                    this.timeout = 6000;
+                    this.snackbar = true;
+                }
+            } catch (error) {
+                if (error.response) {
+                    this.textSnackbar = error.response.data.error;
+                    this.typeAlert = "error";
+                    this.snackbar = true;
+                } else {
+                    this.textSnackbar = error;
+                    this.typeAlert = "error";
+                    this.snackbar = true;
+                }
+            }
         }
     }
 }

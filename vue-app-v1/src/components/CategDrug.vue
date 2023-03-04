@@ -20,10 +20,10 @@
             </v-toolbar>
             <v-container class="grid w-100" fluid>
                 <v-sheet class="child2 py-16" max-height="80vh" rounded="lg" elevation="5">
-                    <DisplayInList content="Paracetamol">
+                    <DisplayInList v-for="drug, index in drugInCateg" :key="index" :content="drug.nameMedoc">
                         <template #actions>
-                            <SeeMoreDrugBtn drug="Paracetamol" />
-                            <DeleteDrugBtn drug="Paracetamol" />
+                            <SeeMoreDrugBtn :drug="drug" />
+                            <DeleteDrugBtn :drug="drug.nameMedoc" />
                         </template>
                     </DisplayInList>
                 </v-sheet>
@@ -47,12 +47,18 @@
         data() {
             return {
                 dialog: false,
+                drugInCateg: [],
             }
         },
         methods: {
             toggleDialog() {
                 this.dialog = !this.dialog;
             },
+        },
+        async created() {
+            const idOfficine = this.$store.getters.idUser;
+            const response = (await this.$axios.get(`/officine/stock/${idOfficine}/${this.categ}`)).data.data;
+            this.drugInCateg = response;
         }
     }
 </script>

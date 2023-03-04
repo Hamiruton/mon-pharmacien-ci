@@ -20,20 +20,17 @@
         },
         data() {
             return {
-                categoryDrug: [
-                    "antipaludique",
-                    "grippe",
-                    "antibiotique",
-                    "antifongique",
-                    "duriétique",
-                    "antiarythmiques",
-                    "antiémétiques",
-                    "antigènes",
-                    "micro-immunothérapie"
-                ]
+                categoryDrug: [],
             }
         },
         methods: {
+        },
+        async created() {
+            const idOfficine = this.$store.getters.idUser;
+            const response = (await this.$axios.get(`officine/stock/${idOfficine}`)).data;
+            for (let res of response.data) {
+                this.categoryDrug.push(res)
+            }
         }
     }
 </script>
