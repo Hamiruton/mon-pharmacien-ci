@@ -24,12 +24,13 @@
                             label="Insérer une photo de l'ordonnance ou du bon d'assurance"
                             title="Sélectionner un fichier"
                             variant="solo"
+                            v-model="uploadPhoto"
                         ></v-file-input>
                     </v-col>
                     <v-col>
                         <v-row>
                             <v-col>
-                                <v-checkbox label="Bon d'assurance"></v-checkbox>
+                                <v-checkbox v-model="bon_assurance" label="Bon d'assurance"></v-checkbox>
                             </v-col>
                             <v-col>
                                 <v-checkbox label="Ordonnance"></v-checkbox>
@@ -48,7 +49,7 @@
                         color="success"
                         class="mr-5"
                         rounded="lg"
-                        @click="toggleDialog"
+                        @click="upload"
                     >Envoyer</v-btn>
                     <v-btn
                         size="large"
@@ -63,17 +64,30 @@
 </template>
 
 <script>
+import { uploadFile } from '@/utils/upload';
 export default {
     name: "Prescription",
     data() {
         return {
             dialog: false,
+            uploadPhoto: [],
+            bon_assurance: null,
         }
     },
     methods: {
         toggleDialog() {
             this.dialog = !this.dialog
-        }
+        },
+        async upload() {
+            const token = this.$store.getters.token;
+            const idUser = this.$store.getters.idUser;
+            let data = {
+                id_patient: idUser,
+                bon_assurance: this.bon_assurance,
+            }
+            let test = await uploadFile(this.uploadPhoto[0], idUser, this.bon_assurance, token)
+            console.log(test)
+        },
     }
 }
 </script>

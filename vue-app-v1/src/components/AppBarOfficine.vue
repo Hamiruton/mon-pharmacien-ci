@@ -64,7 +64,7 @@ export default {
     },
     created() {
         const result = this.$store.getters.user;
-        console.log(result)
+        //console.log(result)
         this.data = result;
     },
     methods: {
