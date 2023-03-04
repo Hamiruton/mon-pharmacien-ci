@@ -231,6 +231,7 @@ class Drug:
             return insertion.acknowledged
         else:
             idMol = db['molecule'].find_one({"nameMol": data["nameMol"]})
+            print(f'idMol => {idMol}')
             if not idMol:
                 return False
             insert_data = {
@@ -267,6 +268,18 @@ class Drug:
             list_drugs.append(copy_drug)
         
         return list_drugs
+    
+
+    @staticmethod
+    def get_affiliatedOf_by_nameMedoc(nameMedoc:str) -> DICT_OF_STR:
+        """
+        Return all drugs data in collection
+        """
+        drug = db['drugs'].find_one({"nameMedoc": nameMedoc})
+        drug_id = str(drug['_id'])
+        list_officine = Drug.get_officine_have_drugs(drug_id)
+        
+        return list_officine
 
 
     @staticmethod
@@ -338,7 +351,7 @@ class Drug:
         
         list_officine = []
         for officine in drug['affiliatedOf']:
-            if officine['qtyMedoc'] > 0:
+            if int(officine['qtyMedoc']) > 0:
                 res_of = db['officine'].find_one({"_id": officine['idOf']})
                 res_of['_id'] = str(res_of['_id'])
                 del res_of['password']
@@ -360,6 +373,24 @@ class Drug:
                 }
             }
         })
+
+        for res in results:
+            cat_drugs.append(res['catMedoc'])
+        
+        cat_drugs = list(set(cat_drugs))
+        
+        if len(cat_drugs) == 0:
+            return False
+        return cat_drugs
+    
+
+    @staticmethod
+    def get_all_cat_drugs() -> List:
+        """
+        Return all drugs categories an officine has
+        """
+        cat_drugs = []
+        results = db['drugs'].find()
 
         for res in results:
             cat_drugs.append(res['catMedoc'])
@@ -423,3 +454,50 @@ class Molecule:
         if len(list_molecules) == 0:
             return False
         return list_molecules
+    
+
+    @staticmethod
+    def get_name_mol_by_id(idMol:str) -> DICT_OF_STR:
+        """
+        Return a name of molecule by its id
+        """
+        molecule = db['molecule'].find_one({'_id': ObjectId(idMol)})
+        
+        if not molecule:
+            return False
+        return molecule['nameMol']
+    
+
+
+class Prescription:
+    """
+    In this class, ...
+    """
+    @staticmethod
+    def set_prescription(data) -> DICT_OF_STR:
+        """
+        ...
+        """
+        credentials = {
+            "filename": data['filename'],
+            "filepath": data['filepath'],
+            "id_patient": ObjectId(data['id_patient']),
+            "bon_assurance": data['bon_assurance'],
+            "idOfficine": '',
+        }
+        result = db['ordonnance'].insert_one(credentials)
+        return result.acknowledged
+    
+
+    @staticmethod
+    def get_all_prescription() -> DICT_OF_STR:
+        """
+        ...
+        """
+        result = db['ordonnance'].find()
+
+        list_ord = []
+        for res in result:
+            list_ord.append({'filename': res['filename'], 'filepath': res['filepath']})
+        #print(list_ord)
+        return list_ord

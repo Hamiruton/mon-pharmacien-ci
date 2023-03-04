@@ -1,7 +1,7 @@
 """ Import module """
 from flask import request, jsonify, make_response
 from src.pharmacy import pharmacy
-from src.models.models import Pharmacy, Drug, Molecule
+from src.models.models import Pharmacy, Drug, Molecule, Prescription
 from src.auth import token_required
 
 
@@ -54,7 +54,7 @@ def register_drugs(idOfficine):
     drugs = Drug()
     res = drugs.saveD(data, idOfficine)
     if res == False:
-        return make_response({"message": "Impossible, vous avez déjà enregistré ce médicament"}, 404)
+        return make_response({"message": "Impossible, vous avez déjà enregistré ce médicament"}, 200)
     else:
         return make_response({"data": res}, 201)
 
@@ -119,3 +119,39 @@ def get_all_drugs_by_categ(idOfficine, categName):
         return make_response(jsonify({"message": f"Il n'existe aucune médicament enregistrée dans {categName}"}), 404)
     else:
         return make_response(jsonify({"data": res}), 200)
+    
+
+@pharmacy.get('/categDrugs/get-all')
+def get_all_cat_drugs():
+    """
+    Route for returning all drugs according to drugs categories
+    """
+    res = Drug.get_all_cat_drugs()
+    if res == False:
+        return make_response(jsonify({"message": f"Pas de catégorie"}), 404)
+    else:
+        return make_response(jsonify({"data": res}), 200)
+    
+
+@pharmacy.get('/molecule/<idMol>')
+def get_mol_by_id(idMol):
+    """
+    Route for returning a name of molecule by its id
+    """
+    res = Molecule.get_name_mol_by_id(idMol)
+    if res == False:
+        return make_response(jsonify({"message": f"Non trouvé"}), 200)
+    else:
+        return make_response(jsonify({"data": res}), 200)
+    
+
+@pharmacy.get('/prescription/get-all')
+def get_all_prescription():
+    """
+    Route for ...
+    """
+    res = Prescription.get_all_prescription()
+    #"print(res)
+    return make_response(jsonify({"data": res}), 200)
+    
+

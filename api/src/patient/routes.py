@@ -1,7 +1,8 @@
 """ Import module """
+from werkzeug.utils import secure_filename
 from flask import request, jsonify, make_response
 from src.patient import patient
-from src.models.models import User, get_on_call_pharmacy, Drug
+from src.models.models import User, get_on_call_pharmacy, Drug, Prescription
 from src.constants.url_pharmacies import URL_ABOBO, URL_COCODY, URL_YOPOUGON
 from src.utils.scrap_pharmacies import web_scrap
 from src.auth import token_required
@@ -92,7 +93,49 @@ def get_all_drugs():
     """
     res = Drug.get_all_drugs()
     #print(res)
-    return jsonify(res)
+    return make_response(jsonify({'data': res}), 200)
+
+
+@patient.get('/medocs/name/<nameMedoc>')
+#@token_required('users')
+def get_affiliatedOf_by_nameMedoc(nameMedoc):
+    """
+    Route for get all officines that have idMedoc
+    """
+    res = Drug.get_affiliatedOf_by_nameMedoc(nameMedoc)
+    #print(res)
+    return make_response(jsonify({'data': res}), 200)
+
+import os
+
+@patient.post('/upload')
+#@token_required('users')
+def upload_file():
+    """
+    Route for uploading files
+    """
+    folder = os.getenv('FLASK_UPLOAD_FOLDER')
+    if 'file' not in request.files:
+        return make_response(jsonify({'message':"Pas de fichier"}), 200)
+    file = request.files['file']
+    if file.filename == '':
+        return make_response(jsonify({'message':"Pas de fichier sélectionné"}), 200)
+    if file:
+        filename = secure_filename(file.filename)
+        filepath = os.path.abspath(os.path.join(folder, filename))
+        file.save(os.path.join(folder, filename))
+        req = request.form
+        #print(req)
+        data = {
+            "filename": filename,
+            "filepath": filepath,
+            "id_patient": req.get('id_patient'),
+            "bon_assurance": req.get('bon_assurance'),
+        }
+        insert_db = Prescription.set_prescription(data)
+        #print(insert_db)
+        return make_response(jsonify({'path':filepath, 'insert': insert_db}), 201)
+    
 
 
 @patient.get('/list-pharmacy')
