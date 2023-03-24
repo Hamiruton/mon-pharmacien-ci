@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <h1 class="uppercase text-9xl">Test</h1>
+  <router-view />
 </template>
 
 <style scoped>
