@@ -6,6 +6,7 @@ import App from './App.vue'
 import router from './router'
 
 import './assets/style.css'
+import '@mdi/font/css/materialdesignicons.css'
 
 const app = createApp(App)
 
