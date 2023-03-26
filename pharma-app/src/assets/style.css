@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .btn-base {
+    @apply text-base uppercase px-8 py-4 font-semibold;
+  }
+}
